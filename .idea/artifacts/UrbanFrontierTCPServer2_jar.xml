@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="UrbanFrontierTCPServer2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/UrbanFrontierTCPServer2_jar</output-path>
+    <root id="archive" name="UrbanFrontierTCPServer2.jar">
+      <element id="module-output" name="UrbanFrontierTCPServer2" />
+      <element id="extracted-dir" path="C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.16.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
