@@ -27,8 +27,8 @@ public class Server {
     private int port;
     private ServerSocket serverSocket;
     private volatile LinkedList<Client> connectedClients;
-    private volatile long retrieveDataTimePeriod = 1000 * 60;  //In milliseconds
-    private volatile long sensorUpdateTime = retrieveDataTimePeriod;
+    private long retrieveDataTimePeriod = 1000 * 10;  //In milliseconds
+    private long sensorUpdateTime = retrieveDataTimePeriod;
 
     /*-----------------------------
     //------Getters/Setters--------
