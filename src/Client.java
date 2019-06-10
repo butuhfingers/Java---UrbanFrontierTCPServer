@@ -26,6 +26,7 @@ public class Client {
     private DataOutputStream output;
     private DataInputStream input;
     private String sendMessageBuffer;
+    private long lastDataSubmitTime = 0;
 
     private boolean isMessageWaiting(){
         try {
@@ -78,5 +79,13 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public long getLastDataSubmitTime(){
+        return this.lastDataSubmitTime;
+    }
+
+    public void setLastDataSubmitTime(){
+        this.lastDataSubmitTime = System.currentTimeMillis();
     }
 }

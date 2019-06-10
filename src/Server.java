@@ -27,7 +27,8 @@ public class Server {
     private int port;
     private ServerSocket serverSocket;
     private volatile LinkedList<Client> connectedClients;
-    private int retrieveDataTimePeriod = 1000 * 60;  //In milliseconds
+    private volatile long retrieveDataTimePeriod = 1000 * 60;  //In milliseconds
+    private volatile long sensorUpdateTime = retrieveDataTimePeriod;
 
     /*-----------------------------
     //------Getters/Setters--------
@@ -49,7 +50,7 @@ public class Server {
             public void run() {
                 sendClientMessages();
             }
-        },0, 5000);
+        },0, retrieveDataTimePeriod);
 
         while(true){
             this.listenForMessages();
@@ -66,13 +67,18 @@ public class Server {
     private void listenForMessages(){
         int i = connectedClients.size();
         for (int clientCount = 0; clientCount < connectedClients.size(); clientCount++) {
-            String myString = connectedClients.get(clientCount).getMessage();
+            Client currentClient = connectedClients.get(clientCount);
+            String myString = currentClient.getMessage();
+            myString = myString.substring(0, myString.indexOf("}}") + 2);
+
             if (myString != null) {
                 System.out.println("My message: " + myString);
-                if(isClientSensorData(myString)){
-                    SensorInfo sensorInfo = new SensorInfo(myString.substring(0, myString.indexOf("}}") + 2));
+                if(isClientSensorData(myString) &&
+                        (System.currentTimeMillis() - currentClient.getLastDataSubmitTime()) > (sensorUpdateTime)){
+                    SensorInfo sensorInfo = new SensorInfo(myString);
 
                     sensorInfo.submitSensorData();
+                    currentClient.setLastDataSubmitTime();
                 }
             }
         }
