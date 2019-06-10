@@ -69,9 +69,9 @@ public class Server {
         for (int clientCount = 0; clientCount < connectedClients.size(); clientCount++) {
             Client currentClient = connectedClients.get(clientCount);
             String myString = currentClient.getMessage();
-            myString = myString.substring(0, myString.indexOf("}}") + 2);
 
             if (myString != null) {
+                myString = myString.substring(0, myString.indexOf("}}") + 2);
                 System.out.println("My message: " + myString);
                 if(isClientSensorData(myString) &&
                         (System.currentTimeMillis() - currentClient.getLastDataSubmitTime()) > (sensorUpdateTime)){
