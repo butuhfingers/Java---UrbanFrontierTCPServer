@@ -70,7 +70,7 @@ public class Server {
             if (myString != null) {
                 System.out.println("My message: " + myString);
                 if(isClientSensorData(myString)){
-                    SensorInfo sensorInfo = new SensorInfo(myString);
+                    SensorInfo sensorInfo = new SensorInfo(myString.substring(0, myString.indexOf("}}") + 2));
 
                     sensorInfo.submitSensorData();
                 }
