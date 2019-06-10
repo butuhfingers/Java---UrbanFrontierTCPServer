@@ -28,13 +28,19 @@ public class SensorInfo {
     public void submitSensorData(){
         System.out.println("Submitting sensor data.....");
 
+        StringBuilder stringBuilder = new StringBuilder();
+        for(byte b : this.physicalAddress){
+            stringBuilder.append(String.format("%02x", b));
+        }
+        System.out.println(stringBuilder.toString());
+
         Connection connection = null;
         PreparedStatement preparedStatement;
         String database = "UrbanFrontierHouse";
         String url = ("jdbc:mysql://mysql.scritch.ninja:3306/" + database + "?serverTimezone=UTC");
         String user = "Urban Frontier User";
         String password = "urbanfrontieruser2016";
-        String query = "INSERT INTO UrbanFrontierHouse.SensorLog (sensorId, value, type) VALUES (unhex(replace(uuid(), \"-\", \"\")), ?, ?)";
+        String query = "INSERT INTO UrbanFrontierHouse.SensorLog (sensorId, value, type) VALUES (unhex(?), ?, ?)";
 
         try{
             connection = DriverManager.getConnection(url, user, password);
@@ -51,17 +57,17 @@ public class SensorInfo {
         while(iterator.hasNext()) {
             Object object = iterator.next();
             try {
-                preparedStatement.setInt(1, Integer.parseInt(dataObject.get(object.toString()).toString()));
-                preparedStatement.setString(2, object.toString());
+                preparedStatement.setString(1, stringBuilder.toString());
+                preparedStatement.setInt(2, Integer.parseInt(dataObject.get(object.toString()).toString()));
+                preparedStatement.setString(3, object.toString());
                 preparedStatement.executeUpdate();
+                System.out.println("....Sensor data submitted");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-//            System.out.println(object.toString() + ": " + dataObject.get(object.toString()));
+
             n++;
         }
-
-        System.out.println("....Sensor data submitted");
     }
 
     private void allocateSensorInfo(String jqueryToAllocate){
@@ -82,12 +88,7 @@ public class SensorInfo {
             this.dataObject = (JSONObject)parser.parse(jsonObject.get("data").toString());
 
             System.out.println(Arrays.toString(parsePhysicalAddress(jsonObject.get("mac").toString())));
-//            Iterator iterator = dataObject.keySet().iterator();
-//
-//            while(iterator.hasNext()) {
-//                Object object = iterator.next();
-//                System.out.println(object.toString() + ": " + dataObject.get(object.toString()));
-//            }
+            physicalAddress = parsePhysicalAddress(jsonObject.get("mac").toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }

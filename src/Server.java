@@ -21,12 +21,17 @@ public class Server {
         }
     }
 
-    //Variables
+    /*-----------------------------
+    //------------Variables--------
+    -----------------------------*/
     private int port;
     private ServerSocket serverSocket;
     private LinkedList<Client> connectedClients;
     private int retrieveDataTimePeriod = 1000 * 60 * 60;  //In milliseconds
 
+    /*-----------------------------
+    //------Getters/Setters--------
+    -----------------------------*/
     public ServerSocket getServerSocket() {
         return serverSocket;
     }
@@ -61,7 +66,6 @@ public class Server {
     private void listenForMessages(){
         int i = connectedClients.size();
         for (int clientCount = 0; clientCount < connectedClients.size(); clientCount++) {
-            System.out.println("Client count: " + i);
             String myString = connectedClients.get(clientCount).getMessage();
             if (myString != null) {
                 System.out.println("My message: " + myString);
@@ -79,10 +83,6 @@ public class Server {
         for (int clientCount = 0; clientCount < connectedClients.size(); clientCount++) {
             connectedClients.get(clientCount).setMessage("[DataRequest]");
             connectedClients.get(clientCount).sendMessage();
-
-            while((String clientMessage = connectedClients.get(clientCount).getMessage()) == null){
-
-            }
         }
     }
 
